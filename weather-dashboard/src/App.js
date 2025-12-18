@@ -138,6 +138,7 @@ export default function App() {
 
             <div className="bg-white/20 rounded-3xl p-8">
               <h3 className="text-xl font-semibold mb-4">Weather Details</h3>
+<<<<<<< HEAD
               {[
                 { label: "Humidity", value: `${current.relativehumidity_2m || 0}%`, icon: "💧" },
                 { label: "Wind Speed", value: `${current.windspeed} km/h`, icon: "🌬️" },
@@ -152,6 +153,17 @@ export default function App() {
                   <span className="font-bold text-lg">{item.value}</span>
                 </div>
               ))}
+=======
+              <div className="space-y-3">
+                <div>Humidity: {current.relativehumidity_2m}%</div>
+                <div>Wind Speed: {current.windspeed} m/s</div>
+                <div>UV Index: {current.uv_index ?? "N/A"}</div>
+                <div>
+                  Visibility: {current.visibility_km?.toFixed(1) ?? "N/A"} km
+                </div>
+                <div>Pressure: {current.pressure_hpa} hPa</div>
+              </div>
+>>>>>>> 0c4456dd52e6c812f8760952a5223a25128377a3
             </div>
 
           </div>
