@@ -102,11 +102,11 @@ export default function App() {
                 <h3 className="text-xl font-semibold mb-6 ml-2">Weather Details</h3>
                 <div className="space-y-4">
                   {[
-                    { label: "Humidity", value: `${current.relativehumidity_2m}%` , icon: "💧" },
-                    { label: "Wind Speed", value: `${current.windspeed} m/s`, icon: "🌬️" },
-                    { label: "UV Index", value: "3", icon: "☀️" },
-                    { label: "Visibility", value: "9.66 km", icon: "👁️" },
-                    { label: "Pressure", value: "1016 hPa", icon: "📉" },
+                    { label: "Humidity", value: `${current.relativehumidity_2m}%`, icon: "💧" },
+{ label: "Wind Speed", value: `${current.windspeed} m/s`, icon: "🌬️" },
+{ label: "UV Index", value: current.uv_index ?? "N/A", icon: "☀️" },
+{ label: "Visibility", value: `${current.visibility_km?.toFixed(1)} km`, icon: "👁️" },
+{ label: "Pressure", value: `${current.pressure_hpa} hPa`, icon: "📉" },
                   ].map((item, idx) => (
                     <div key={idx} className="bg-white/20 p-5 rounded-2xl flex items-center justify-between hover:bg-white/30 transition-colors">
                       <div className="flex items-center gap-3">
