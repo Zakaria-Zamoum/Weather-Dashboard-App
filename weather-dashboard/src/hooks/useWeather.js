@@ -1,61 +1,59 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { getWeatherForCoords } from "../utils/weatherApi";
+import { get_weather_for_coords } from "../utils/weatherApi";
 import { LOCATIONS } from "../config/locations";
 
-// Lightweight hook to fetch weather, cache results briefly and expose a refresh.
 export default function useWeather(city) {
-  const [current, setCurrent] = useState(null);
-  const [daily, setDaily] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [lastUpdated, setLastUpdated] = useState(null);
-  const cacheRef = useRef({});
+  const [Current_Data_NOW, set_Current_Data_NOW] = useState(null);
+  const [daily, set_daily] = useState(null);
+  const [loading, set_loading] = useState(false);
+  const [ERROR_state, set_ERROR_state] = useState(null);
+  const [TimeOfLAST_update, set_TimeOfLAST_update] = useState(null);
+  const cache_ref = useRef({});
 
-  const doFetch = useCallback(
-    async (cityName) => {
-      const coords = LOCATIONS[cityName];
+  const ExecuteTheFetch = useCallback(
+    async (city_name) => {
+      const coords = LOCATIONS[city_name];
       if (!coords) {
-        setError("Unknown city");
-        setCurrent(null);
-        setDaily(null);
+        set_ERROR_state("Unknown city");
+        set_Current_Data_NOW(null);
+        set_daily(null);
         return;
       }
 
-      // Return cached result if it's fresh (5 minutes)
-      const cached = cacheRef.current[cityName];
+      const cached = cache_ref.current[city_name];
       if (cached && Date.now() - cached.ts < 5 * 60 * 1000) {
-        setCurrent(cached.current);
-        setDaily(cached.daily);
-        setLastUpdated(cached.ts);
+        set_Current_Data_NOW(cached.current);
+        set_daily(cached.daily);
+        set_TimeOfLAST_update(cached.ts);
         return;
       }
 
-      setLoading(true);
-      setError(null);
+      set_loading(true);
+      set_ERROR_state(null);
 
       try {
-        const { current: cur, daily: dly, elapsed } = await getWeatherForCoords(coords);
-        setCurrent(cur);
-        setDaily(dly);
+        const { current: cur, daily: dly, elapsed } = await get_weather_for_coords(coords);
+        set_Current_Data_NOW(cur);
+        set_daily(dly);
         const now = Date.now();
-        setLastUpdated(now);
-        cacheRef.current[cityName] = { ts: now, current: cur, daily: dly, elapsed };
+        set_TimeOfLAST_update(now);
+        cache_ref.current[city_name] = { ts: now, current: cur, daily: dly, elapsed };
       } catch (err) {
-        setError(err.response ? `${err.response.status}` : err.message || "Fetch failed");
-        setCurrent(null);
-        setDaily(null);
+        set_ERROR_state(err.response ? `${err.response.status}` : err.message || "Fetch failed");
+        set_Current_Data_NOW(null);
+        set_daily(null);
       } finally {
-        setLoading(false);
+        set_loading(false);
       }
     },
     []
   );
 
   useEffect(() => {
-    if (city) doFetch(city);
-  }, [city, doFetch]);
+    if (city) ExecuteTheFetch(city);
+  }, [city, ExecuteTheFetch]);
 
-  const refresh = useCallback(() => doFetch(city), [city, doFetch]);
+  const refresh = useCallback(() => ExecuteTheFetch(city), [city, ExecuteTheFetch]);
 
-  return { current, daily, loading, error, lastUpdated, refresh };
+  return { current: Current_Data_NOW, daily, loading, error: ERROR_state, last_updated: TimeOfLAST_update, refresh };
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function getWeatherForCoords({ lat, lon }) {
+export async function get_weather_for_coords({ lat, lon }) {
   const start = Date.now();
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=auto`;
   const res = await axios.get(url, { timeout: 10000 });

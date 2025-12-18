@@ -1,13 +1,16 @@
-export const LOCATIONS = {
-  Casablanca: { lat: 33.59, lon: -7.62 },
-  Rabat: { lat: 34.02, lon: -6.83 },
-  Marrakech: { lat: 31.63, lon: -8.0 },
-};
+import MOROCCAN_CITIES from './moroccanCities.json';
+
+export const LOCATIONS = MOROCCAN_CITIES.reduce((acc, city) => {
+  acc[city.name] = {
+    lat: parseFloat(city.latitude),
+    lon: parseFloat(city.longitude)
+  };
+  return acc;
+}, {});
 
 export const DEFAULT_CITY = "Casablanca";
-export const CITY_LIST = Object.keys(LOCATIONS);
+export const CITY_LIST = Object.keys(LOCATIONS).sort();
 
-// Lowercase aliases — some teams prefer non-ALL_CAPS imports.
 export const locations = LOCATIONS;
-export const defaultCity = DEFAULT_CITY;
-export const cityList = CITY_LIST;
+export const default_city = DEFAULT_CITY;
+export const city_list = CITY_LIST;
