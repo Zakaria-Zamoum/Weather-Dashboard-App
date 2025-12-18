@@ -63,20 +63,23 @@ export default function App() {
     <div className="min-h-screen text-white p-4 md:p-8 flex justify-center bg-gradient-to-br from-[#4A6FA5] to-[#2B4C7E]">
       <div className="w-full max-w-6xl space-y-6">
 
-        <form onSubmit={Handle_Submit_EVENT} className="relative">
+        <form onSubmit={Handle_Submit_EVENT} className="relative w-full">
           <input
             type="text"
             value={inputForSearch}
             onChange={(e) => setInputForSearch(e.target.value)}
             placeholder="Search for a city..."
             list="city-options"
-            className="w-full p-4 pl-6 rounded-2xl bg-white/20 text-white placeholder-gray-200 outline-none"
+            className="w-full p-4 pl-6 rounded-2xl bg-white/20 backdrop-blur-md border border-white/10 text-white placeholder-gray-200 outline-none focus:bg-white/30 transition-all text-lg shadow-lg [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0"
           />
           <datalist id="city-options">
             {city_list.map((c) => (
               <option key={c} value={c} />
             ))}
           </datalist>
+          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 opacity-70 hover:opacity-100 bg-white/10 p-2 rounded-full">
+            🔍
+          </button>
         </form>
 
         {loading && (
@@ -136,22 +139,22 @@ export default function App() {
               </div>
             </div>
 
-            <div className="bg-white/20 rounded-3xl p-8">
-              <h3 className="text-xl font-semibold mb-4">Weather Details</h3>
-              {[
-                { label: "Humidity", value: `${current.relativehumidity_2m || 0}%`, icon: "💧" },
-                { label: "Wind Speed", value: `${current.windspeed} km/h`, icon: "🌬️" },
-                { label: "UV Index", value: `${current.uv_index || 0}`, icon: "☀️" },
-                { label: "Visibility", value: `${(current.visibility_km || 0).toFixed(1)} km`, icon: "👁️" },
-                { label: "Pressure", value: `${current.pressure_hpa || 0} hPa`, icon: "📉" },
-              ].map((item, idx) => (
-                <div key={idx} className="bg-white/20 p-5 rounded-2xl flex items-center justify-between hover:bg-white/30 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <span className="opacity-80 font-medium">{item.label}</span>
+            <div className="bg-white/20 backdrop-blur-lg rounded-[2rem] p-8 border border-white/10 shadow-xl h-full flex flex-col">
+              <h3 className="text-xl font-semibold mb-6">Weather Details</h3>
+              <div className="flex-1 flex flex-col justify-start gap-4">
+                {[
+                  { label: "Humidity", value: `${current.relativehumidity_2m || 0}%` },
+                  { label: "Wind Speed", value: `${current.windspeed} km/h` },
+                  { label: "UV Index", value: `${current.uv_index || 0}` },
+                  { label: "Visibility", value: `${(current.visibility_km || 0).toFixed(1)} km` },
+                  { label: "Pressure", value: `${current.pressure_hpa || 0} hPa` },
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-white/20 p-4 rounded-xl flex items-center justify-between shadow-sm hover:bg-white/30 transition-colors">
+                    <span className="opacity-90 font-medium text-lg">{item.label}</span>
+                    <span className="font-semibold text-lg drop-shadow-sm">{item.value}</span>
                   </div>
-                  <span className="font-bold text-lg">{item.value}</span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
           </div>
