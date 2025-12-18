@@ -102,7 +102,11 @@ export default function App() {
                 <h3 className="text-xl font-semibold mb-6 ml-2">Weather Details</h3>
                 <div className="space-y-4">
                   {[
-                    { label: "Humidity", value: `${current.relativehumidity_2m}%`
+                    { label: "Humidity", value: 
+current?.relativehumidity_2m !== undefined
+    ? `${current.relativehumidity_2m}%`
+    : "N/A"
+
  , icon: "💧" },
                     { label: "Wind Speed", value: `${current.windspeed} m/s`, icon: "🌬️" },
                     { label: "UV Index", value: "3", icon: "☀️" },
