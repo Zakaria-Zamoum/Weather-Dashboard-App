@@ -9,15 +9,19 @@ export async function get_weather_for_coords({ lat, lon }) {
   const elapsed = Date.now() - start;
 
   if (!res || !res.data) throw new Error("Empty response from weather API");
-
-  // 🔹 Extract current humidity from hourly data
   const currentTime = res.data.current_weather?.time;
-  const humidityIndex = res.data.hourly?.time?.indexOf(currentTime);
+  let currentHumidity = null;
 
-  const currentHumidity =
-    humidityIndex !== -1 && humidityIndex !== undefined
-      ? res.data.hourly.relativehumidity_2m[humidityIndex]
-      : null;
+  if (currentTime && res.data.hourly?.time?.length) {
+    const currentHour = currentTime.slice(0, 13);
+    const humidityIndex = res.data.hourly.time.findIndex((t) =>
+      t.startsWith(currentHour)
+    );
+
+    if (humidityIndex !== -1) {
+      currentHumidity = res.data.hourly.relativehumidity_2m[humidityIndex];
+    }
+  }
 
   return {
     current: res.data.current_weather
